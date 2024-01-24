@@ -44,17 +44,17 @@ class EpresenceController extends Controller
 
         $data = $data->map(function ($val) {
 
-            $waktuMasuk = Epresence::where('type', 'IN')->get('waktu')[0]->waktu;
-            $waktuPulang = Epresence::where('type', 'OUT')->get('waktu')[0]->waktu;
-            $statusMasuk = Epresence::where('type', 'IN')->get('is_approve')[0]->is_approve;
-            $statusPulang = Epresence::where('type', 'OUT')->get('is_approve')[0]->is_approve;
+            $waktuMasuk = Epresence::where('type', 'IN')->where('id_user', $val->id_user)->get('waktu')[0]->waktu;
+            $waktuPulang = Epresence::where('type', 'OUT')->where('id_user', $val->id_user)->get('waktu')[0]->waktu;
+            $statusMasuk = Epresence::where('type', 'IN')->where('id_user', $val->id_user)->get('is_approve')[0]->is_approve;
+            $statusPulang = Epresence::where('type', 'OUT')->where('id_user', $val->id_user)->get('is_approve')[0]->is_approve;
 
             return [
                 'id_user' => $val->id_user,
                 'nama_user' => User::find($val->id_user)->name,
                 'tanggal' => date('Y-m-d', strtotime($val->tanggal)),
-                'waktu_masuk' => date('H:m:s', strtotime($waktuMasuk)),
-                'waktu_pulang' => date('H:m:s', strtotime($waktuPulang)),
+                'waktu_masuk' => date('H:i:s', strtotime($waktuMasuk)),
+                'waktu_pulang' => date('H:i:s', strtotime($waktuPulang)),
                 'status_masuk' => $statusMasuk ? "APPROVE" : "REJECT",
                 'status_pulang' => $statusPulang ? "APPROVE" : "REJECT"
             ];
