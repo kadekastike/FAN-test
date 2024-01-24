@@ -20,15 +20,29 @@ class EpresenceController extends Controller
             'type' => 'required',
         ]);
 
-        $presence = Epresence::create([
-            'id_user' => Auth::user()->id,
-            'type' => $data['type'],
-            'waktu' => Carbon::now()->format('Y-m-d H:i:s')
-        ]);
-        return response()->json([
-            'type' => $presence->type,
-            'waktu' => $presence->waktu
-        ], 200);
+        $numberOfIn = Epresence::where('waktu', '>', Carbon::now()->subDays(1))->where('type', 'IN')->count();
+        $numberOfOut = Epresence::where('waktu', '>', Carbon::now()->subDays(1))->where('type', 'OUT')->count();
+        if ($numberOfIn > 1 && $data['type'] == 'IN') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah absen masuk.'
+            ], 400);
+        } else if ($numberOfOut > 1 && $data['type'] == 'OUT') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Anda sudah absen pulang.'
+            ], 400);
+        } else {
+            $presence = Epresence::create([
+                'id_user' => Auth::user()->id,
+                'type' => $data['type'],
+                'waktu' => Carbon::now()->format('Y-m-d H:i:s')
+            ]);
+            return response()->json([
+                'type' => $presence->type,
+                'waktu' => $presence->waktu
+            ], 200);
+        }
     }
 
     public function getPresence()
