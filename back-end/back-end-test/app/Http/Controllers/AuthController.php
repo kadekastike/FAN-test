@@ -14,7 +14,11 @@ class AuthController extends Controller
         if (Auth::attempt($userData)) {
             $token = $request->user()->createToken('api-token')->plainTextToken;
 
-            return response()->json(['token' => $token], 200);
+            return response()->json([
+                'message' => 'login berhasil',
+                'token' => $token,
+                'token-type' => 'Bearer'
+            ], 200);
         }
 
         return response()->json(['message' => 'Email dan Password salah'], 401);
