@@ -27,14 +27,5 @@ class UserSeeder extends Seeder
             'npp' => 11111,
             'password' => bcrypt('password'),
         ]);
-
-        // testing purpose
-        User::create([
-            'name' => 'Kadek Astike',
-            'email' => 'kadek@email.com',
-            'npp' => 54321,
-            'npp_supervisor' => 11111,
-            'password' => bcrypt('password'),
-        ]);
     }
 }
