@@ -21,12 +21,12 @@ class EpresenceController extends Controller
 
         $numberOfIn = Epresence::where('waktu', '>', Carbon::now()->subDays(1))->where('type', 'IN')->count();
         $numberOfOut = Epresence::where('waktu', '>', Carbon::now()->subDays(1))->where('type', 'OUT')->count();
-        if ($numberOfIn > 1 && $data['type'] == 'IN') {
+        if ($numberOfIn >= 1 && $data['type'] == 'IN') {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda sudah absen masuk.'
             ], 400);
-        } else if ($numberOfOut > 1 && $data['type'] == 'OUT') {
+        } else if ($numberOfOut >= 1 && $data['type'] == 'OUT') {
             return response()->json([
                 'success' => false,
                 'message' => 'Anda sudah absen pulang.'
