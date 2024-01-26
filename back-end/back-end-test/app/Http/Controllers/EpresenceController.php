@@ -19,8 +19,16 @@ class EpresenceController extends Controller
             'type' => 'required',
         ]);
 
-        $numberOfIn = Epresence::where('waktu', '>', Carbon::now()->subDays(1))->where('type', 'IN')->count();
-        $numberOfOut = Epresence::where('waktu', '>', Carbon::now()->subDays(1))->where('type', 'OUT')->count();
+        $numberOfIn = Epresence::where('waktu', '>', Carbon::now()->subDays(1))
+            ->where('type', 'IN')
+            ->where('id_user', Auth::user()->id) 
+            ->count();
+
+        $numberOfOut = Epresence::where('waktu', '>', Carbon::now()->subDays(1))
+            ->where('type', 'OUT')
+            ->where('id_user', Auth::user()->id)
+            ->count();
+
         if ($numberOfIn >= 1 && $data['type'] == 'IN') {
             return response()->json([
                 'success' => false,
